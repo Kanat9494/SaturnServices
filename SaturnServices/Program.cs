@@ -16,6 +16,38 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+#region Web Sockets
+// Расскомментировать для веб сокетов
+//var webSocketOptions = new WebSocketOptions
+//{
+//    KeepAliveInterval = TimeSpan.FromMinutes(5),
+//};
+
+//app.UseWebSockets(webSocketOptions);
+//app.Use(async (context, next) =>
+//{
+//    if (context.Request.Path == "/ws")
+//    {
+//        if (context.WebSockets.IsWebSocketRequest)
+//        {
+//            using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+//            await Echo(webSocket);
+//        }
+//        else
+//        {
+//            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+//        }
+//    }
+//    else
+//    {
+//        await next(context);
+//    }
+
+//});
+
+#endregion
+
+
 app.UseAuthorization();
 
 app.MapControllers();
