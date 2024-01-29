@@ -7,9 +7,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddGrpc();
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -19,34 +16,38 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
+
 #region Web Sockets
 // Расскомментировать для веб сокетов
-//var webSocketOptions = new WebSocketOptions
-//{
-//    KeepAliveInterval = TimeSpan.FromMinutes(5),
-//};
 
-//app.UseWebSockets(webSocketOptions);
-//app.Use(async (context, next) =>
-//{
-//    if (context.Request.Path == "/ws")
-//    {
-//        if (context.WebSockets.IsWebSocketRequest)
-//        {
-//            using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-//            await Echo(webSocket);
-//        }
-//        else
-//        {
-//            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-//        }
-//    }
-//    else
-//    {
-//        await next(context);
-//    }
+var webSocketOptions = new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2)
+};
 
-//});
+app.UseWebSockets(webSocketOptions);
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/ws")
+    {
+        if (context.WebSockets.IsWebSocketRequest)
+        {
+            using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+            await WebSocketHelper.Echo(webSocket);
+        }
+        else
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+        }
+    }
+    else
+    {
+        await next(context);
+    }
+
+});
 
 #endregion
 
@@ -54,7 +55,5 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.MapGrpcService<GreeterService>();
 
 app.Run();

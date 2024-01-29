@@ -1,20 +1,11 @@
 ﻿namespace SaturnServices.Controllers;
 
-[Route("api/[controller]")]
+[Route("/api/ws")]
 [ApiController]
-public class ChatsController : ControllerBase
+public class WebSocketController : ControllerBase
 {
-    public ChatsController()
-    {
-
-    }
-
-    [HttpGet("Test")]
-    public IActionResult Test2()
-        => Ok("Работает");
-
-    [HttpGet("ConnectToWebSocket")]
-    public async Task ConnectToWebSocket()
+    [HttpGet]
+    public async Task Get()
     {
         if (HttpContext.WebSockets.IsWebSocketRequest)
         {
