@@ -2,7 +2,7 @@
 
 public class Message
 {
-    public string SenderName { get; set; }
-    public string? ReceiverName { get; set; }
-    public string Content { get; set; }
+    public ulong SenderId { get; set; }
+    public ulong ReceiverId { get; set; }
+    public string? Content { get; set; }
 }

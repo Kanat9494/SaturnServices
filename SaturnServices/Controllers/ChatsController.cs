@@ -14,12 +14,12 @@ public class ChatsController : ControllerBase
         => Ok("Работает");
 
     [HttpGet("ConnectToWS")]
-    public async Task ConnectToWS()
+    public async Task ConnectToWS(ulong userId)
     {
         if (HttpContext.WebSockets.IsWebSocketRequest)
         {
             using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-            await WebSocketHelper.Echo(webSocket);
+            await WebSocketHelper.Echo(webSocket, userId);
         }
         else
         {

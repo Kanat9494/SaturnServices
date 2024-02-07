@@ -22,7 +22,8 @@ app.Use(async (context, next) =>
         if (context.WebSockets.IsWebSocketRequest)
         {
             using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-            await WebSocketHelper.Echo(webSocket);
+            ulong userId = ulong.Parse(context.Request.Query["userId"]);
+            await WebSocketHelper.Echo(webSocket, userId);
         }
         else
         {

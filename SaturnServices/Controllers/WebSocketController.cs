@@ -14,8 +14,9 @@ public class WebSocketController : ControllerBase
     {
         if (HttpContext.WebSockets.IsWebSocketRequest)
         {
+            ulong userId = ulong.Parse(HttpContext.Request.Query["userId"]);
             using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-            await WebSocketHelper.Echo(webSocket);
+            await WebSocketHelper.Echo(webSocket, userId);
         }
         else
         {
