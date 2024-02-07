@@ -13,6 +13,8 @@ public class WebSocketHelper
 
             while (!receiveResult.CloseStatus.HasValue)
             {
+                var message = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
+                Debug.WriteLine(message);
                 await webSocket.SendAsync(
                     new ArraySegment<byte>(buffer, 0, receiveResult.Count),
                     receiveResult.MessageType,
