@@ -2,19 +2,15 @@
 
 [Route("api/[controller]")]
 [ApiController]
-public class ChatsController : ControllerBase
+public class WebSocketController : ControllerBase
 {
-    public ChatsController()
+    public WebSocketController()
     {
 
     }
 
-    [HttpGet("Test")]
-    public IActionResult Test2()
-        => Ok("Работает");
-
-    [HttpGet("ConnectToWS")]
-    public async Task ConnectToWS()
+    [HttpGet("ConnectWS")]
+    public async Task Get()
     {
         if (HttpContext.WebSockets.IsWebSocketRequest)
         {
