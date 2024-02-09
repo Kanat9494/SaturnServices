@@ -2,6 +2,7 @@
 
 public class WebSocketHelper
 {
+    internal static StringBuilder MessageBuilder { get; private set; } = new StringBuilder();
     internal static async Task Echo(WebSocket webSocket, ulong userId)
     {
         try
@@ -14,16 +15,23 @@ public class WebSocketHelper
             var buffer = new byte[1024 * 4];
             var receiveResult = await webSocket.ReceiveAsync(
                 new ArraySegment<byte>(buffer), CancellationToken.None);
-            var jsonMessage = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
-            var messageResult = JsonSerializer.Deserialize<Message>(jsonMessage);
-            
-            Debug.WriteLine(jsonMessage);
 
 
             while (!receiveResult.CloseStatus.HasValue)
             {
-                var jsonString = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
-                var message = JsonSerializer.Deserialize<Message>(jsonString);
+                MessageBuilder.Clear();
+
+                MessageBuilder.Append(Encoding.UTF8.GetString(buffer, 0, receiveResult.Count));
+                var message = JsonSerializer.Deserialize<Message>(MessageBuilder.ToString());
+                
+
+                while (receiveResult.EndOfMessage == false)
+                {
+                    Array.Resize(ref buffer, buffer.Length * 2);
+                    receiveResult = await webSocket.ReceiveAsync(
+                        new ArraySegment<byte>(buffer), CancellationToken.None);
+                }
+
                 var client = WebSocketManager.GetClient(message?.ReceiverId ?? 0);
                 if (client != null)
                 {
