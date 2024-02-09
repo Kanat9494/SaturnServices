@@ -6,7 +6,10 @@ public class WebSocketManager
 
     protected internal static void AddClient(ChatClient client)
     {
-        _clients.Add(client.UserId, client);
+        if (!_clients.ContainsKey(client.UserId))
+            _clients.Add(client.UserId, client);
+        else
+            _clients[client.UserId] = client;
     }
 
     public static void RemoveClient(ulong userId)
