@@ -26,4 +26,10 @@ public class ChatsController : ControllerBase
             HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
         }
     }
+
+    [HttpGet("Pagination")]
+    public IActionResult Pagination(int pageSize = 10, int pageIndex = 0)
+    {
+        return Ok($"Skipped count: {pageSize * pageIndex}");
+    }
 }
