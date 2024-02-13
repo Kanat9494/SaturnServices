@@ -4,7 +4,7 @@ public class WebSocketManager
 {
     private static readonly Dictionary<ulong, ChatClient> _clients = new Dictionary<ulong, ChatClient>();
 
-    protected internal static void AddClient(ChatClient client)
+    protected internal static void AddOrUpdateClient(ChatClient client)
     {
         if (!_clients.ContainsKey(client.UserId))
             _clients.Add(client.UserId, client);

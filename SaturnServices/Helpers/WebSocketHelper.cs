@@ -7,7 +7,7 @@ public class WebSocketHelper
     {
         try
         {
-            WebSocketManager.AddClient(new ChatClient
+            WebSocketManager.AddOrUpdateClient(new ChatClient
             {
                 UserId = userId,
                 ClientSocket = webSocket,
