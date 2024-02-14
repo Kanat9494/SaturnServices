@@ -53,7 +53,7 @@ public class WebSocketHelper
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
-            
+            await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Unexpected error", CancellationToken.None);
         }
     }
 }
