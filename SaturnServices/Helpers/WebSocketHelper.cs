@@ -2,12 +2,19 @@
 
 public class WebSocketHelper
 {
+    public WebSocketHelper()
+    {
+        _webSocketManager = new WebSocketManager();
+    }
+
+
+    private readonly WebSocketManager _webSocketManager;
     internal StringBuilder MessageBuilder { get; private set; } = new StringBuilder();
     internal async Task Echo(WebSocket webSocket, ulong userId)
     {
         try
         {
-            WebSocketManager.AddOrUpdateClient(new ChatClient
+            _webSocketManager.AddOrUpdateClient(new ChatClient
             {
                 UserId = userId,
                 ClientSocket = webSocket,
@@ -32,7 +39,7 @@ public class WebSocketHelper
                         new ArraySegment<byte>(buffer), CancellationToken.None);
                 }
 
-                var client = WebSocketManager.GetClient(message?.ReceiverId ?? 0);
+                var client = _webSocketManager.GetClient(message?.ReceiverId ?? 0);
                 if (client != null)
                 {
                     await client!.ClientSocket!.SendAsync(new ArraySegment<byte>(buffer, 0, receiveResult.Count),

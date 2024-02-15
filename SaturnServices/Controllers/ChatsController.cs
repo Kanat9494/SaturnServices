@@ -4,9 +4,9 @@
 [ApiController]
 public class ChatsController : ControllerBase
 {
-    public ChatsController()
+    public ChatsController(WebSocketHelper webSocketHelper)
     {
-        _webSocketHelper = new WebSocketHelper();   
+        _webSocketHelper = webSocketHelper;
     }
 
     WebSocketHelper _webSocketHelper;

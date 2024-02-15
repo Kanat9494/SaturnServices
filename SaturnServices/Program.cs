@@ -7,6 +7,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Custom services
+builder.Services.AddSingleton<WebSocketHelper>();
+
 var app = builder.Build();
 
 var webSocketOptions = new WebSocketOptions
@@ -15,7 +18,8 @@ var webSocketOptions = new WebSocketOptions
 };
 app.UseWebSockets();
 
-var webSocketHelper = new WebSocketHelper();
+var serviceProvider = builder.Services.BuildServiceProvider();
+var webSocketHelper = serviceProvider.GetRequiredService<WebSocketHelper>();    
 
 app.Use(async (context, next) =>
 {
