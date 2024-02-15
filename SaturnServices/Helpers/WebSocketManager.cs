@@ -17,8 +17,26 @@ public class WebSocketManager
         _clients.Remove(userId);
     }
 
-    public ChatClient GetClient(ulong userId)
+    protected internal ulong RemoveClientBySocket(WebSocket socket)
+    {
+        var client = _clients.FirstOrDefault(c => c.Value.ClientSocket == socket);
+        if (_clients.ContainsKey(client.Value.UserId))
+        {
+
+            _clients.Remove(client.Key);
+            return client.Value.UserId;
+        }
+
+        return 0;
+    }
+
+    protected internal ChatClient GetClient(ulong userId)
     {
         return _clients.ContainsKey(userId) ? _clients[userId] : null;
+    }
+
+    protected internal int GetConnectedClientsCount()
+    {
+        return _clients.Count;
     }
 }

@@ -19,6 +19,8 @@ public class WebSocketHelper
                 UserId = userId,
                 ClientSocket = webSocket,
             });
+            Debug.WriteLine($"Подключился пользователь, с userId: {userId}");
+            Debug.WriteLine($"Количество подключенных пользователей: {_webSocketManager.GetConnectedClientsCount()}");
             var buffer = new byte[1024 * 4];
             var receiveResult = await webSocket.ReceiveAsync(
                 new ArraySegment<byte>(buffer), CancellationToken.None);
@@ -60,7 +62,11 @@ public class WebSocketHelper
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
-            //await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Unexpected error", CancellationToken.None);
+            var clientId = _webSocketManager.RemoveClientBySocket(webSocket);
+            if (clientId > 0)
+                Debug.WriteLine($"Пользователь с userId {clientId} прервал соединение");
+            Debug.WriteLine($"Количество оставшихся подключенных пользователей: {_webSocketManager.GetConnectedClientsCount()}");
+
         }
     }
 }
