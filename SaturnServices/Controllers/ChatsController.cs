@@ -6,8 +6,10 @@ public class ChatsController : ControllerBase
 {
     public ChatsController()
     {
-
+        _webSocketHelper = new WebSocketHelper();   
     }
+
+    WebSocketHelper _webSocketHelper;
 
     [HttpGet("Test")]
     public IActionResult Test2()
@@ -19,7 +21,7 @@ public class ChatsController : ControllerBase
         if (HttpContext.WebSockets.IsWebSocketRequest)
         {
             using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-            await WebSocketHelper.Echo(webSocket, userId);
+            await _webSocketHelper.Echo(webSocket, userId);
         }
         else
         {

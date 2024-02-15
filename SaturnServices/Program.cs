@@ -15,6 +15,8 @@ var webSocketOptions = new WebSocketOptions
 };
 app.UseWebSockets();
 
+var webSocketHelper = new WebSocketHelper();
+
 app.Use(async (context, next) =>
 {
     if (context.Request.Path == "/ws")
@@ -23,7 +25,7 @@ app.Use(async (context, next) =>
         {
             using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
             ulong userId = ulong.Parse(context.Request.Query["userId"]);
-            await WebSocketHelper.Echo(webSocket, userId);
+            await webSocketHelper.Echo(webSocket, userId);
         }
         else
         {

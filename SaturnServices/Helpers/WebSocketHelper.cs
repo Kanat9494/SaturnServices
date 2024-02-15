@@ -2,8 +2,8 @@
 
 public class WebSocketHelper
 {
-    internal static StringBuilder MessageBuilder { get; private set; } = new StringBuilder();
-    internal static async Task Echo(WebSocket webSocket, ulong userId)
+    internal StringBuilder MessageBuilder { get; private set; } = new StringBuilder();
+    internal async Task Echo(WebSocket webSocket, ulong userId)
     {
         try
         {
