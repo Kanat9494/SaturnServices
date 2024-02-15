@@ -18,14 +18,21 @@ public class ChatsController : ControllerBase
     [HttpGet("ConnectToWS")]
     public async Task ConnectToWS(ulong userId)
     {
-        if (HttpContext.WebSockets.IsWebSocketRequest)
+        try
         {
-            using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-            await _webSocketHelper.Echo(webSocket, userId);
+            if (HttpContext.WebSockets.IsWebSocketRequest)
+            {
+                using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+                await _webSocketHelper.Echo(webSocket, userId);
+            }
+            else
+            {
+                HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+
         }
     }
 
