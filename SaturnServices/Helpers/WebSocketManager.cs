@@ -20,15 +20,15 @@ public class WebSocketManager
     protected internal ulong RemoveClientBySocket(WebSocket socket)
     {
         var client = _clients.FirstOrDefault(c => c.Value.ClientSocket == socket);
-        if (client != null)
-        {
-            if (_clients.ContainsKey(client.Value.UserId))
-            {
+        //if (client != null)
+        //{
+        //    if (_clients.ContainsKey(client.Value.UserId))
+        //    {
 
-                _clients.Remove(client.Key);
-                return client.Value.UserId;
-            }
-        }
+        //        _clients.Remove(client.Key);
+        //        return client.Value.UserId;
+        //    }
+        //}
         
 
         return 0;
