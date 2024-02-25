@@ -1,6 +1,4 @@
-﻿using SaturnServices.Constants;
-using Telegram.Bot;
-
+﻿
 namespace SaturnServices.Helpers;
 
 public class WebSocketHelper
@@ -8,12 +6,10 @@ public class WebSocketHelper
     public WebSocketHelper()
     {
         _webSocketManager = new WebSocketManager();
-        _telegramBot = new TelegramBotClient(ServiceConstants.LETO_DELIVERY_BOT_ID);
     }
 
 
     private readonly WebSocketManager _webSocketManager;
-    private readonly ITelegramBotClient _telegramBot;
     internal StringBuilder MessageBuilder { get; private set; } = new StringBuilder();
     internal async Task Echo(WebSocket webSocket, ulong userId)
     {
@@ -78,6 +74,26 @@ public class WebSocketHelper
     protected internal async Task SendTelegramMessage(string message)
     {
         Console.WriteLine(message);
-        await _telegramBot.SendTextMessageAsync(chatId: ServiceConstants.LETO_DELIVERY_GROUP_ID, text: message);
+        
+        try
+        {
+            var content = new
+            {
+                chat_id = ServiceConstants.LETO_DELIVERY_GROUP_ID,
+                text = message
+            };
+            var jsonContent = JsonSerializer.Serialize(content);
+            var postData = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            string apiUrl = $"https://api.telegram.org/bot{ServiceConstants.LETO_DELIVERY_BOT_ID}/sendMessage";
+
+            using (var httpClient = new HttpClient())
+            {
+                var response = await httpClient.PostAsync(apiUrl, postData);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 }

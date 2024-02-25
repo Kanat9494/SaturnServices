@@ -8,7 +8,8 @@ global using System.Text.Json;
 global using System.Text;
 global using SaturnServices.Models;
 global using SaturnServices.Servers.WebSocket;
-global using Telegram.Bot;
+global using SaturnServices.Constants;
+
 
 
 
