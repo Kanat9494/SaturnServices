@@ -41,4 +41,17 @@ public class ChatsController : ControllerBase
     {
         return Ok($"Skipped count: {pageSize * pageIndex}");
     }
+
+    [HttpPost("SendTelegramMessage")]
+    public async Task<IActionResult> SendTelegramMessage([FromBody] TelegramMessage telegramMessage)
+    {
+        if (string.IsNullOrEmpty(telegramMessage.Message))
+        {
+            return BadRequest("Сообщение не может быть пустым");
+        }
+
+        await _webSocketHelper.SendTelegramMessage(telegramMessage.Message);
+
+        return Ok("Сообщение успешно отправлено");
+    }
 }

@@ -1,14 +1,19 @@
-﻿namespace SaturnServices.Helpers;
+﻿using SaturnServices.Constants;
+using Telegram.Bot;
+
+namespace SaturnServices.Helpers;
 
 public class WebSocketHelper
 {
     public WebSocketHelper()
     {
         _webSocketManager = new WebSocketManager();
+        _telegramBot = new TelegramBotClient("7096096900:AAEdfspJ0kc7n3Or893T9WJOho-iud-Ex64");
     }
 
 
     private readonly WebSocketManager _webSocketManager;
+    private readonly ITelegramBotClient _telegramBot;
     internal StringBuilder MessageBuilder { get; private set; } = new StringBuilder();
     internal async Task Echo(WebSocket webSocket, ulong userId)
     {
@@ -68,5 +73,11 @@ public class WebSocketHelper
             Console.WriteLine($"Количество оставшихся подключенных пользователей: {_webSocketManager.GetConnectedClientsCount()}");
 
         }
+    }
+
+    protected internal async Task SendTelegramMessage(string message)
+    {
+        Console.WriteLine(message);
+        await _telegramBot.SendTextMessageAsync(chatId: ServiceConstants.LETO_DELIVERY_GROUP_ID, text: message);
     }
 }
