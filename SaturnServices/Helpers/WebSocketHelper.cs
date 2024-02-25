@@ -8,7 +8,7 @@ public class WebSocketHelper
     public WebSocketHelper()
     {
         _webSocketManager = new WebSocketManager();
-        _telegramBot = new TelegramBotClient("7096096900:AAEdfspJ0kc7n3Or893T9WJOho-iud-Ex64");
+        _telegramBot = new TelegramBotClient(ServiceConstants.LETO_DELIVERY_BOT_ID);
     }
 
 
