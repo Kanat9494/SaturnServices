@@ -7,8 +7,40 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Custom services
+// Custom services WebSocketh
 builder.Services.AddSingleton<WebSocketHelper>();
+
+// Entity framework
+builder.Services.AddDbContext<SaturnDBContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("SaturnConnection")
+    )
+);
+
+// Custom app services
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthService, JWTAuthService>();
+
+
+// JWT Authorization
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = AuthOptions.ISSUER,
+        ValidAudience = AuthOptions.AUDIENCE,
+        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+    };
+});
 
 var app = builder.Build();
 
@@ -42,6 +74,9 @@ app.Use(async (context, next) =>
     }
 
 });
+
+// Configure Authentication
+app.UseAuthentication();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

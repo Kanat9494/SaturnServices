@@ -2,6 +2,7 @@
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ChatsController : ControllerBase
 {
     public ChatsController(WebSocketHelper webSocketHelper)
@@ -16,6 +17,7 @@ public class ChatsController : ControllerBase
         => Ok("Работает");
 
     [HttpGet("ConnectToWS")]
+    [AllowAnonymous]
     public async Task ConnectToWS(ulong userId)
     {
         try
@@ -37,12 +39,14 @@ public class ChatsController : ControllerBase
     }
 
     [HttpGet("Pagination")]
+    [AllowAnonymous]
     public IActionResult Pagination(int pageSize = 10, int pageIndex = 0)
     {
         return Ok($"Skipped count: {pageSize * pageIndex}");
     }
 
     [HttpPost("SendTelegramMessage")]
+    [AllowAnonymous]
     public async Task<IActionResult> SendTelegramMessage([FromBody] TelegramMessage telegramMessage)
     {
         if (string.IsNullOrEmpty(telegramMessage.Message))
